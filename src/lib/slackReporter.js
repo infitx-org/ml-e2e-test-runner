@@ -10,6 +10,13 @@ const categoryMap = {
     "Static": "Static Tests"
 };
 
+const millisecondsToTime = (milliseconds) => {
+  const seconds = Math.floor(milliseconds / 1000)
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+  return `${String(hours).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`
+}
+
 class SlackReporter {
 
   constructor (config) {
@@ -22,11 +29,10 @@ class SlackReporter {
     this.allureResultsPath = config.allureResultsPath || './reports/allure_results';
     this.showDetails = config.showDetails || false;
     this.slackWebhookDescription = config.slackWebhookDescription || '';
-    this.testRunName = config.testRunName || 'E2E Test';
     this.releaseCdUrl = config.releaseCdUrl;
   }
 
-  generateCombinedReport = async (reportURL, logs) => {
+  generateCombinedReport = async (reportURL, logs, startTime, releaseURL) => {
     const blocks = [];
 
     const results = {};
@@ -101,8 +107,12 @@ class SlackReporter {
         }
     });
 
+    const duration = Date.now() - startTime;
+
     await releaseCd({
       url: this.releaseCdUrl,
+      report: releaseURL || reportURL,
+      duration,
       totalPassedAssertions: totalPassed,
       totalAssertions: totalTests
     }, logs);
@@ -156,14 +166,18 @@ class SlackReporter {
 
     blocks.push({ type: "divider" });
 
-    const totalStatus = totalPassed === totalTests ? ":white_check_mark:" : ":warning:";
+    const isPassed = totalPassed === totalTests;
     // Append the following at the start of the blocks array
     blocks.unshift({
-            type: "section",
-            text: {
-                type: "mrkdwn",
-                text: `${totalStatus} *${this.testRunName}:* ${this.slackWebhookDescription} \`${totalPassed}/${totalTests}\` <${reportURL}|View Report>`
-            }
+      type: 'rich_text_section',
+      elements: [
+        { type: 'text', text: `${isPassed ? '✅' : '⚠️'}${this.slackWebhookDescription} `},
+        { type: 'link', url: reportURL, text: this.testRunName },
+        { type: 'text', text: ` tests: ` },
+        { type: 'text', text: `${totalPassed}/${totalTests}`, style: { code: true } },
+        { type: 'text', text: `, duration: ` },
+        { type: 'text', text: millisecondsToTime(duration), style: { code: true } }
+      ]
     });
     return {
       blocks,
@@ -171,13 +185,13 @@ class SlackReporter {
     };
   }
 
-  sendSlackNotification = async (reportURL = 'http://localhost/') => {
+  sendSlackNotification = async (reportURL = 'http://localhost/', startTime, releaseURL) => {
     const logs = [];
     if (!this.webhook && !this.webhookForFailed) {
       logs.push('No Slack webhook URLs configured.')
       return logs;
     }
-    const { blocks, isPassed } = await this.generateCombinedReport(reportURL, logs)
+    const { blocks, isPassed } = await this.generateCombinedReport(reportURL, logs, startTime, releaseURL);
     // console.log(JSON.stringify(blocks,null,2))
     // process.exit(0)
 

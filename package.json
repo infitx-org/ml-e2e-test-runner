@@ -12,6 +12,7 @@
   },
   "author": "",
   "dependencies": {
+    "aws-sdk": "^2.1692.0",
     "@bull-board/api": "^6.7.10",
     "@bull-board/express": "^6.7.10",
     "@mojaloop/ml-testing-toolkit-client-lib": "^1.8.1",

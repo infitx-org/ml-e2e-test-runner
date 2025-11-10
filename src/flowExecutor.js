@@ -212,6 +212,7 @@ class FlowExecutor {
           slackWebhookDescription: Config.getTestConfig().slackWebhookDescription,
           testRunName: Config.getTestConfig().testRunName,
           releaseCdUrl: process.env.RELEASE_CD_URL,
+          s3: Config.getTestConfig().s3,
         },
         children: [{
           name: `Wait Queue`,
