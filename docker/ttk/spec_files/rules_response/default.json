@@ -1,0 +1,116 @@
+[
+  {
+    "ruleId": 24,
+    "priority": 1,
+    "description": "post /transfers",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 2,
+      "type": "mojaloop_connector_outbound",
+      "asynchronous": false,
+      "specFile": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/api_spec.yaml",
+      "callbackMapFile": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/callback_map.json",
+      "responseMapFile": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/response_map.json",
+      "jsfRefFile": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/mockRef.json",
+      "triggerTemplatesFolder": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/trigger_templates"
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/transfers"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "body": {
+          "currentState": "WAITING_FOR_PARTY_ACCEPTANCE"
+        },
+        "statusCode": "200",
+        "scripts": {
+          "scriptingEngine": "postman"
+        }
+      },
+      "type": "MOCK_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 25,
+    "priority": 1,
+    "description": "put /transfers/{transferId}",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 2,
+      "type": "mojaloop_connector_outbound",
+      "asynchronous": false,
+      "specFile": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/api_spec.yaml",
+      "callbackMapFile": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/callback_map.json",
+      "responseMapFile": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/response_map.json",
+      "jsfRefFile": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/mockRef.json",
+      "triggerTemplatesFolder": "spec_files/api_definitions/mojaloop_connector_outbound_2.1/trigger_templates"
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/transfers/{transferId}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "put"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "body": {
+          "currentState": "WAITING_FOR_CONVERSION_ACCEPTANCE"
+        },
+        "statusCode": "200",
+        "scripts": {
+          "exec": [
+            "const requestBody = JSON.parse(request.body)",
+            "let newBody = {}",
+            "",
+            "if (requestBody.acceptParty) {",
+            "  newBody = {",
+            "    currentState: \"WAITING_FOR_CONVERSION_ACCEPTANCE\"",
+            "  }",
+            "} else if (requestBody.acceptQuote) {",
+            "  newBody = {",
+            "    currentState: \"COMPLETED\"",
+            "  }",
+            "} else if (requestBody.acceptConversion) {",
+            "  newBody = {",
+            "    currentState: \"WAITING_FOR_QUOTE_ACCEPTANCE\"",
+            "  }",
+            "}",
+            "",
+            "",
+            "custom.appendEventBody(newBody)"
+          ],
+          "scriptingEngine": "javascript"
+        },
+        "delay": 20
+      },
+      "type": "MOCK_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  }
+]

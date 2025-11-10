@@ -1,0 +1,14 @@
+{
+    "inputValues": {
+      "PER_SCHEME_FSP_ID": "test-zmw-dfsp",
+      "PER_SCHEME_SDK_OUTBOUND_URL": "http://localhost:4040",
+      "PER_SCHEME_HAPPY_PATH_MSISDN": "16665551001",
+      "PER_SCHEME_MSISDN_EXISTS_IN_MULTIPLE_SCHEMES": "33556677889",
+      "PER_SCHEME_CURRENCY": "ZMW"
+    },
+    "options": {
+      "breakOnError": true,
+      "transformerName": "none",
+      "generateIDType": "ulid"
+    }
+  }

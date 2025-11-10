@@ -1,0 +1,6 @@
+{
+    "options": {},
+    "name": "Multi-scheme Tests",
+    "description": "This test suite contains tests that are multi-scheme specific.",
+    "test_cases": []
+}

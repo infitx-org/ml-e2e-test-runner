@@ -1,0 +1,65 @@
+services:
+
+  # ml-e2e-test-runner:
+  #   image: infitx-org/ml-e2e-test-runner:local
+  #   build:
+  #     context: ./
+  #     dockerfile: ./Dockerfile
+  #   # env_file: ./sample.env
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - redis
+  #   command: npm run start
+  #   volumes:
+  #     - ./config:/opt/app/config
+  #     - ./reports:/opt/app/reports
+  #     - ./ttk-environments:/opt/app/ttk-environments
+  #   user: root
+  #   # healthcheck:
+  #   #   test: [
+  #   #     "CMD" ,
+  #   #     "apk", "add", "--no-cache", "curl",
+  #   #     "&&",
+  #   #     "curl", "-f", "http://localhost:3000"
+  #   #     ]
+  #   #   timeout: 20s
+  #   #   retries: 10
+  #   #   start_period: 40s
+  #   #   interval: 30s
+
+  redis:
+    image: "redis:6.2.4-alpine"
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD" ,"sh", "-c", "redis-cli","ping"]
+      timeout: 20s
+      retries: 10
+      start_period: 40s
+      interval: 30s
+
+  ml-testing-toolkit:
+    image: mojaloop/ml-testing-toolkit:v18.9.0
+    volumes:
+      - "./docker/ttk/spec_files:/opt/app/spec_files"
+      - "./ttk-environments:/opt/app/examples/environments"
+    ports:
+      - "4040:4040"
+      - "5050:5050"
+    environment:
+      - AUTH_ENABLED=FALSE
+    command: npm start
+    user: root
+
+  mojaloop-testing-toolkit-ui:
+    image: mojaloop/ml-testing-toolkit-ui:v16.1.2
+    ports:
+      - "6060:6060"
+    environment:
+      - API_BASE_URL=http://localhost:5050
+      - AUTH_ENABLED=FALSE
+    command:
+      - sh
+      - /usr/share/nginx/start.sh
+    user: root

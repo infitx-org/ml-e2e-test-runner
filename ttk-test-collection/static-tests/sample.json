@@ -1,0 +1,6 @@
+{
+    "options": {},
+    "name": "Static Tests",
+    "description": "This test suite contains tests that are static",
+    "test_cases": []
+}

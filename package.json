@@ -1,0 +1,39 @@
+{
+  "name": "ml-e2e-test-runner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run start:service",
+    "start:service": "node src/index.js",
+    "start:testRun": "node src/testRun.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky || true"
+  },
+  "author": "",
+  "dependencies": {
+    "@bull-board/api": "^6.7.10",
+    "@bull-board/express": "^6.7.10",
+    "@mojaloop/ml-testing-toolkit-client-lib": "^1.8.1",
+    "@slack/webhook": "^7.0.5",
+    "allure-commandline": "^2.33.0",
+    "axios": "^1.9.0",
+    "bull": "^4.16.5",
+    "bullmq": "^5.41.8",
+    "commander": "^13.1.0",
+    "ioredis": "^5.6.0",
+    "strip-ansi": "^7.1.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
+    "husky": "9.1.7",
+    "lint-staged": "16.1.6"
+  },
+  "lint-staged": {
+    "*.js": [
+      "echo 'JavaScript files staged for commit'"
+    ]
+  }
+}

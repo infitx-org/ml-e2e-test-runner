@@ -1,0 +1,81 @@
+{
+    "ttkBackendHost": "localhost",
+    "reportsLinkBaseURL": "http://localhost:3000/reports",
+    "slackWebhookUrl": "",
+    "slackWebhookUrlForFailed": "",
+    "slackWebhookDescription": "",
+    "testRunName": "E2E Test",
+    "redisOptions": {
+        "host": "localhost",
+        "port": 6379,
+        "password": "",
+        "tls": false
+    },
+    "dfspConfig": {
+        "test-zmw-dfsp": {
+            "name": "test-zmw-dfsp",
+            "enabled": true,
+            "currency": "ZMW",
+            "endpoint": "payer",
+            "happyPathMSISDN": 16665551001
+        },
+        "test-mwk-dfsp": {
+            "name": "test-mwk-dfsp",
+            "enabled": true,
+            "currency": "MWK",
+            "endpoint": "payee",
+            "happyPathMSISDN": 16665551002
+        },
+        "test-ugx-dfsp": {
+            "name": "test-ugx-dfsp",
+            "enabled": false,
+            "currency": "UGX",
+            "endpoint": "payee",
+            "happyPathMSISDN": 16665551003
+        }
+    },
+    "multiSchemeConfig": {
+        "test-zmw-dfsp": {
+            "dfsp": "test-zmw-dfsp",
+            "sendAmount": 10,
+            "targets": {
+                "test-mwk-dfsp": {
+                    "dfsp": "test-mwk-dfsp",
+                    "receiveAmount": 600
+                },
+                "test-ugx-dfsp": {
+                    "dfsp": "test-ugx-dfsp",
+                    "receiveAmount": 1200
+                }
+            }
+        },
+        "test-mwk-dfsp": {
+            "dfsp": "test-mwk-dfsp",
+            "sendAmount": 600,
+            "targets": {
+                "test-zmw-dfsp": {
+                    "dfsp": "test-zmw-dfsp",
+                    "receiveAmount": 10
+                },
+                "test-ugx-dfsp": {
+                    "dfsp": "test-ugx-dfsp",
+                    "receiveAmount": 1200
+                }
+            }
+        },
+        "test-ugx-dfsp": {
+            "dfsp": "test-ugx-dfsp",
+            "sendAmount": 1200,
+            "targets": {
+                "test-zmw-dfsp": {
+                    "dfsp": "test-zmw-dfsp",
+                    "receiveAmount": 10
+                },
+                "test-mwk-dfsp": {
+                    "dfsp": "test-mwk-dfsp",
+                    "receiveAmount": 600
+                }
+            }
+        }
+    }
+}
