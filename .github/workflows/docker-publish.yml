@@ -50,12 +50,3 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Trigger profile CD
-        run: |
-          echo "Triggering downstream workflow"
-          curl -L \
-              -X POST \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ secrets.TRIGGER_DOWNSTREAM }}" \
-              https://api.github.com/repos/infitx-org/profile-cd/actions/workflows/docker-image.yaml/dispatches \
-              -d '{"ref":"main","inputs":{"upstream":"${{ github.event.repository.url }}","image":"${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}","tag":"${{ steps.meta.outputs.version }}"}}'
