@@ -169,15 +169,18 @@ class SlackReporter {
     const isPassed = totalPassed === totalTests;
     // Append the following at the start of the blocks array
     blocks.unshift({
-      type: 'rich_text_section',
-      elements: [
-        { type: 'text', text: `${isPassed ? '✅' : '⚠️'}${this.slackWebhookDescription} `},
-        { type: 'link', url: reportURL, text: this.testRunName },
-        { type: 'text', text: ` tests: ` },
-        { type: 'text', text: `${totalPassed}/${totalTests}`, style: { code: true } },
-        { type: 'text', text: `, duration: ` },
-        { type: 'text', text: millisecondsToTime(duration), style: { code: true } }
-      ]
+      type: 'rich_text',
+      elements: [{
+        type: 'rich_text_section',
+        elements: [
+          { type: 'text', text: `${isPassed ? '✅' : '⚠️'}${this.slackWebhookDescription} `},
+          { type: 'link', url: reportURL, text: this.testRunName },
+          { type: 'text', text: ` tests: ` },
+          { type: 'text', text: `${totalPassed}/${totalTests}`, style: { code: true } },
+          { type: 'text', text: `, duration: ` },
+          { type: 'text', text: millisecondsToTime(duration), style: { code: true } }
+        ]
+      }]
     });
     return {
       blocks,
