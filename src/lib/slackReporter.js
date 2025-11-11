@@ -30,6 +30,7 @@ class SlackReporter {
     this.showDetails = config.showDetails || false;
     this.slackWebhookDescription = config.slackWebhookDescription || '';
     this.releaseCdUrl = config.releaseCdUrl;
+    this.testRunName = config.testRunName;
   }
 
   generateCombinedReport = async (reportURL, logs, startTime, releaseURL) => {
@@ -173,7 +174,7 @@ class SlackReporter {
       elements: [{
         type: 'rich_text_section',
         elements: [
-          { type: 'text', text: `${isPassed ? '✅' : '⚠️'}${this.slackWebhookDescription} `},
+          { type: 'text', text: `${isPassed ? '✅' : '⚠️'} ${this.slackWebhookDescription} `},
           { type: 'link', url: reportURL, text: this.testRunName },
           { type: 'text', text: ` tests: ` },
           { type: 'text', text: `${totalPassed}/${totalTests}`, style: { code: true } },
