@@ -210,7 +210,7 @@ class FlowExecutor {
           slackWebhookUrl: Config.getTestConfig().slackWebhookUrl,
           slackWebhookUrlForFailed: Config.getTestConfig().slackWebhookUrlForFailed,
           slackWebhookDescription: Config.getTestConfig().slackWebhookDescription,
-          testRunName: Config.getTestConfig().testRunName,
+          testRunName: Config.getTestConfig().testRunName || 'E2E Test',
           releaseCdUrl: process.env.RELEASE_CD_URL,
           s3: Config.getTestConfig().s3,
         },
