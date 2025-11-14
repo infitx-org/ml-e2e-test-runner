@@ -108,9 +108,9 @@ class AllureReportGenerator {
             steps: assertionSteps,
             attachments: attachments,
             links: [
-                (request.traceId || request.traceUrl) && {
-                    name: `Request traceId ${request.traceId}`,
-                    url: request.traceUrl,
+                (request.request.traceId || request.request.traceUrl) && {
+                    name: `Request traceId ${request.request.traceId}`,
+                    url: request.request.traceUrl,
                     type: 'custom'
                 }
             ].filter(Boolean),
