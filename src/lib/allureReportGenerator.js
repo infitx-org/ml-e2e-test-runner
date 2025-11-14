@@ -47,7 +47,7 @@ class AllureReportGenerator {
     createAllureTest(testCase) {
         const testId = uuidv4();
         const testCaseStatus = ttkReportHelpers.ifFailedTestCase(testCase) ? "failed" : "passed";
-
+        const traceIds = new Set((testCase.requests || []).map(request => request.traceId).filter(Boolean))
         return {
             uuid: testId,
             name: testCase.name,
@@ -60,13 +60,21 @@ class AllureReportGenerator {
             parameters: [],
             steps: [],
             attachments: [],
-            links: [
-                (testCase.traceId || testCase.traceUrl) && {
-                    name: `Request traceId ${testCase.traceId}`,
-                    url: testCase.traceUrl,
-                    type: 'custom'
-                }
-            ].filter(Boolean),
+            links: traceIds.size > 1
+                ? (testCase.requests || []).map((request, index) => {
+                    return (request.traceId || request.traceUrl) && {
+                        name: `${request.request?.description || `Request ${index + 1}`} traceId ${request.traceId}`,
+                        url: request.traceUrl,
+                        type: 'link'
+                    };
+                }).filter(Boolean)
+                : traceIds.size === 1
+                    ? [{
+                        name: `${testCase.name} traceId ${traceIds.values().next().value}`,
+                        url: testCase.requests?.find(r => r.traceUrl)?.traceUrl,
+                        type: 'link'
+                    }]
+                    : [],
         };
     }
 
