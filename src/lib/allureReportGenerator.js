@@ -107,6 +107,13 @@ class AllureReportGenerator {
             parameters: stepParameters,
             steps: assertionSteps,
             attachments: attachments,
+            links: [
+                (request.testResult?.traceId || request.testResult?.traceUrl) && {
+                    name: `Request traceId ${request.testResult?.traceId}`,
+                    url: request.testResult?.traceUrl,
+                    type: 'custom'
+                }
+            ].filter(Boolean),
         };
     }
 
